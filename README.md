@@ -11,6 +11,10 @@ Built 2026-07-17 as a reference for future homelab tool decisions — rather tha
 
 `tools.db` — SQLite database, schema in `schema.sql`. Two tables: `episodes` (show/number/title/date/url) and `tools` (name/url/description/category, linked to the episode it was mentioned in).
 
+`scripts/` — the extraction pipeline used to build the database from each
+show's RSS feed (`parse_feeds.py` → `filter_categorize.py` → `load_db.py`).
+Re-run these to pick up new episodes; see `PROGRESS.md` for details.
+
 ## Querying
 
 ```bash
@@ -20,4 +24,8 @@ sqlite3 tools.db "SELECT t.name, t.description, e.title, e.episode_number, e.sho
 
 ## Coverage
 
-See `PROGRESS.md` for build status — this is a large dataset (potentially 800+ episodes combined), built incrementally.
+Complete: all 150 Self-Hosted episodes (1–150) and all 675 Linux Unplugged
+episodes (1–675), 5,691 cataloged tool mentions total. See `PROGRESS.md`
+for the full build notes, methodology, and known data-quality caveats
+(Linux Unplugged's show notes are noisier than Self-Hosted's, being a
+general Linux talk show rather than a dedicated self-hosting show).

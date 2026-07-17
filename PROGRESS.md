@@ -4,11 +4,11 @@ Status: **Both shows fully processed, full episode archives covered.**
 
 ## Summary
 
-| Show | Episodes in DB | Episode range | Tools cataloged | Distinct tool names |
-|---|---|---|---|---|
-| Self-Hosted | 150 | 1–150 (complete, no gaps) | 1,078 | 907 |
-| Linux Unplugged | 675 | 1–675 (complete, no gaps) | 4,613 | 4,101 |
-| **Total** | **825** | | **5,691** | |
+| Show | Episodes in DB | Episode range | Tools cataloged |
+|---|---|---|---|
+| Self-Hosted | 150 | 1–150 (complete, no gaps) | 1,077 |
+| Linux Unplugged | 675 | 1–675 (complete, no gaps) | 4,586 |
+| **Total** | **825** | | **5,663** |
 
 `tools.db` is built and committed. Both shows' full episode archives (not just recent RSS entries) are covered — see "Key discovery" below for why this was tractable in one pass.
 
@@ -84,11 +84,17 @@ categorizing) is where judgment calls live — see below.
 - **Category vocabulary** was kept intentionally fixed and small:
   `monitoring, media, networking, security, backup, storage, dashboard,
   automation, containers, communication, productivity, ai, development,
-  gaming, identity, analytics, remote-access, other`. Roughly 55% of
-  Self-Hosted tools and 67% of Linux Unplugged tools landed in a specific
-  category via keyword match; the rest fell to `other` rather than forcing
-  a guess — `other` is a legitimate, intentionally large bucket, not a
-  failure state.
+  gaming, identity, analytics, remote-access, other`. Categorization uses
+  word-boundary keyword matching against name+description+URL (a first
+  pass used plain substring matching and had real bugs — e.g. the keyword
+  `monit` false-matched inside "Monitor"/"Monitoring", and `nas` false-
+  matched inside "NASA's" — both fixed by requiring word boundaries).
+  Roughly 60% of Self-Hosted tools and 78% of Linux Unplugged tools fell
+  to `other` rather than a specific category — `other` is a legitimate,
+  intentionally large bucket for a keyword-based approach, not a failure
+  state, but it does mean category isn't a reliable filter for finding
+  "everything storage-related," for example — text search on
+  name/description will surface more.
 - **Duplicate tool names across episodes are expected and preserved.**
   Each row in `tools` is one *mention* of a tool in one episode's show
   notes (matching the schema's `episode_id` foreign key), not a
@@ -106,13 +112,17 @@ categorizing) is where judgment calls live — see below.
   general Linux talk show rather than a dedicated self-hosting show. Even
   after blocklist filtering, its "Links:" sections routinely mix in
   driver-download pages, distro release announcements, hardware product
-  pages, personal dotfiles/infra repos, one-off blog posts, and
-  conference/meetup pages that weren't fully caught by the blocklist. I
-  iterated the blocklist across several spot-check rounds (~50-item random
-  samples, multiple passes) and it converged well, but at ~4,600 kept
-  Linux Unplugged entries, a residual single-digit-percent of non-tool
-  noise almost certainly remains — treat `category = 'other'` LUP rows
-  with somewhat more skepticism than Self-Hosted ones.
+  pages, personal dotfiles/infra repos, one-off blog posts/news articles
+  (one recurring surprise: the hosts apparently love NASA Mars-helicopter
+  news, which produced ~20 rows before `nasa.gov`/`mars.nasa.gov` etc.
+  were added to the blocklist), and conference/meetup pages. I iterated
+  the blocklist across many spot-check rounds (~50-item random samples,
+  repeated passes, plus a full audit of the most-repeated names and the
+  `monitoring`/`storage` categories after fixing the keyword-matching
+  bugs) and it converged well, but at ~4,600 kept Linux Unplugged entries,
+  a residual single-digit-percent of non-tool noise almost certainly
+  remains — treat `category = 'other'` LUP rows with somewhat more
+  skepticism than Self-Hosted ones.
 - **Self-Hosted is much cleaner** — it's a dedicated self-hosting show,
   so nearly everything in its "Links:" sections is genuinely on-topic.
   Residual noise there is minimal (a handful of borderline

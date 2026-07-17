@@ -25,7 +25,7 @@ sqlite3 tools.db "SELECT t.name, t.description, e.title, e.episode_number, e.sho
 ## Coverage
 
 Complete: all 150 Self-Hosted episodes (1–150) and all 675 Linux Unplugged
-episodes (1–675), 5,691 cataloged tool mentions total. See `PROGRESS.md`
+episodes (1–675), 5,663 cataloged tool mentions total. See `PROGRESS.md`
 for the full build notes, methodology, and known data-quality caveats
 (Linux Unplugged's show notes are noisier than Self-Hosted's, being a
 general Linux talk show rather than a dedicated self-hosting show).

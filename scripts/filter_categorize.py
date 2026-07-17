@@ -76,6 +76,9 @@ DOMAIN_BLOCKLIST = {
     'unpluggedcore.com','webroot.com','yardhouse.com','2.5admins.com',
     'colonyevents.com','texaslinuxfest.org','linuxheadlines.show',
     'forms.gle','configcat.com','entropy.works','0pointer.net',
+    'nasa.gov','sciencealert.com','inverse.com','bbc.com','npr.org',
+    'i.redd.it','redd.it','sam.gov','sifive.com','chrislewicki.com',
+    'newscientist.com','popsci.com','gizmodo.com','sciencedaily.com',
 }
 
 # (domain, path-prefix) pairs to block — same domain hosts both the real
@@ -230,10 +233,15 @@ CATEGORY_RULES = [
 ]
 
 def infer_category(name, desc, url):
+    # Word-boundary matching, not plain substring — plain "in" matching let
+    # short/ambiguous keywords false-positive badly (e.g. 'monit' inside
+    # "Monitor"/"Monitoring", 'nas' inside "NASA's", 'mcp' inside a URL
+    # path like "mcpelauncher").
     text = f'{name} {desc} {url}'.lower()
     for cat, keywords in CATEGORY_RULES:
         for kw in keywords:
-            if kw in text:
+            pattern = r'\b' + re.escape(kw.strip()) + r'\b'
+            if re.search(pattern, text):
                 return cat
     return 'other'
 

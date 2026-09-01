@@ -33,6 +33,16 @@ parent so the site nests them instead of showing each as its own row. Add
 more entries there to curate other duplicated tools — no code changes
 needed, `dedupe_and_export.py` reads it automatically.
 
+This is a *software* tools database — physical hardware (SBCs, Zigbee/
+Z-Wave radios, sensors, cameras, NAS enclosures, routers-as-a-box, etc.)
+is out of scope for it. `aliases.json`'s `hardware_exclude` list (123
+entries as of the last full sweep) pulls those out of `docs/data/tools.json`
+entirely; `dedupe_and_export.py` writes them to their own
+`docs/data/hardware.json` instead (deduped/aggregated the same way, just
+not linked from the site yet — a real hardware inventory page is future
+work, not built here). Add more names to `hardware_exclude` as new ones
+turn up; it matches on the raw show-notes name, same as `merge`/`families`.
+
 ## Community corrections & additions
 
 Every tool row on the live site has a "Suggest a fix" link, and the header

@@ -1,6 +1,5 @@
 {
   "_comment": "Manual curation for tool 'families' where the raw show-notes extraction produced many near-duplicate/noise entries for what's really one product (blog posts, GitHub issues, NixOS-deployment writeups, docker-compose examples, etc all mentioning the same core tool). Two mechanisms: 'merge' folds a noisy name variant into a canonical entry (its episode mentions are absorbed, it stops existing as its own row). 'families' groups genuinely distinct sub-products/apps under a shared parent for display (each keeps its own entry, but the site nests them under the parent instead of showing them as flat top-level rows when both match a search). 'overrides' forces clean name/url/description/category on a canonical entry instead of the usual best-of-the-raw-variants heuristic. Add more families here as other duplicated products are found - this file is the whole mechanism, no code changes needed to extend it.",
-
   "merge": {
     "nextcloud": "nextcloud",
     "a fireside chat with nextcloud founder frank karlitschek - nextcloud": "nextcloud",
@@ -54,10 +53,8 @@
     "nixtcloud: nextcloud with nixos in the backend and p2p connectivity enabled": "nextcloud",
     "lup’s nextcloud.nix": "nextcloud",
     "soltros’ nextcloud-on-nixos": "nextcloud",
-
     "nextcloud aio": "nextcloud-aio",
     "nextcloud all-in-one": "nextcloud-aio",
-
     "notes for nextcloud": "nextcloud notes",
     "nextcloud cookbook on ios": "nextcloud cookbook",
     "nextcloud/cookbook": "nextcloud cookbook",
@@ -66,9 +63,7 @@
     "gpxpod - nextcloud": "nextcloud gpxpod",
     "gpxedit - nextcloud": "nextcloud gpxedit",
     "gpodder sync in the nextcloud app store": "nextcloud gpoddersync",
-
     "smokeping - docker hub": "smokeping",
-
     "home assistant drama": "home assistant",
     "home assistant forum thread": "home assistant",
     "troubleshooting your configuration - home assistant": "home assistant",
@@ -81,10 +76,8 @@
     "hass.io": "home assistant",
     "hass.io - home assistant": "home assistant",
     "installing hass.io - home assistant": "home assistant",
-
     "home assistant community store": "home assistant hacs"
   },
-
   "overrides": {
     "nextcloud": {
       "name": "Nextcloud",
@@ -103,19 +96,29 @@
       "description": "Nextcloud's official Notes app — plain-text/Markdown notes stored in your Nextcloud files and synced across devices.",
       "category": "storage"
     },
-    "nextcloud cookbook": { "name": "Nextcloud Cookbook" },
-    "nextcloud tasks": { "name": "Nextcloud Tasks" },
-    "nextcloud phonetrack": { "name": "Nextcloud PhoneTrack" },
-    "nextcloud gpxpod": { "name": "Nextcloud GpxPod" },
-    "nextcloud gpxedit": { "name": "Nextcloud GpxEdit" },
-    "nextcloud gpoddersync": { "name": "Nextcloud GPodder Sync" },
-
+    "nextcloud cookbook": {
+      "name": "Nextcloud Cookbook"
+    },
+    "nextcloud tasks": {
+      "name": "Nextcloud Tasks"
+    },
+    "nextcloud phonetrack": {
+      "name": "Nextcloud PhoneTrack"
+    },
+    "nextcloud gpxpod": {
+      "name": "Nextcloud GpxPod"
+    },
+    "nextcloud gpxedit": {
+      "name": "Nextcloud GpxEdit"
+    },
+    "nextcloud gpoddersync": {
+      "name": "Nextcloud GPodder Sync"
+    },
     "smokeping": {
       "name": "SmokePing",
       "url": "https://oss.oetiker.ch/smokeping/",
       "description": "SmokePing keeps track of your network latency, packet loss, and jitter over time with RRD-graphed history."
     },
-
     "home assistant": {
       "name": "Home Assistant",
       "url": "https://www.home-assistant.io/",
@@ -127,7 +130,6 @@
       "category": "automation"
     }
   },
-
   "families": {
     "nextcloud": {
       "parent": "nextcloud",
@@ -152,5 +154,130 @@
         "home assistant cloud"
       ]
     }
-  }
+  },
+  "hardware_exclude": [
+    "1.4 Display Port KVM Switch",
+    "5.8 dbi antenna",
+    "[OpenWrt Wiki] Techdata: TP-Link EAP245 v3",
+    "About Home Assistant Connect ZBT-1",
+    "AIR-1 Air Quality Sensor For Home Assistant",
+    "Amcrest 4MP ProHD Indoor WiFi Camera",
+    "An Open-Source USB to CAN Adapter - CANable",
+    "Aqara G4 Smart Wireless Video Doorbell",
+    "Aqara Temperature Humidity Sensor",
+    "Aqara Wireless Smart Temperature Humidity Sensor",
+    "Argon ONE V2 Case for Raspberry Pi 4",
+    "ATOM Echo Smart Speaker Development Kit",
+    "AutoPi: Telematics IoT Infrastructure for Fleets and developers - Built on Raspberry Pi",
+    "Banana Pi - a line of low-cost credit card-sized single-board computers produced by the Chinese company Shenzhen SINOVOIP Co., Ltd. Using various SoCs including Realtek, Mediatek, Allwinner, etc",
+    "Banana Pi OpenWrt One",
+    "Banana Pi OpenWrt One PCBA Router Board",
+    "Beaglebone - a low-power open-source single-board computer produced by Texas Instruments in association with Digi-Key and element14. Using Texas Instruments SoCs",
+    "BitMaker-hub/NerdMiner_v2: Improved version of first ESP32 NerdMiner",
+    "Blloc | Back to the root",
+    "Blue Series Smart Fan/Light Canopy Module | Inovelli",
+    "Brocade ICX 6610-24P Switch",
+    "Buy a Raspberry Pi 4 Desktop Kit – Raspberry Pi",
+    "Buy a Raspberry Pi High Quality Camera – Raspberry Pi",
+    "DeskPi Pro Set-top Box For Raspberry Pi 4",
+    "DIY Pro Audio Kit for Raspberry Pi",
+    "DS1621+ | Synology Inc.",
+    "Dual 4G LTE Router for Public Transportation MAX Transit Duo",
+    "Dual 4G LTE Router for Public Transportation MAX Transit Duo- Peplink",
+    "Dual Gigabit Ethernet Carrier Board for Raspberry Pi CM4",
+    "Dual Gigabit Ethernet Carrier Board for Raspberry Pi CM4 4 with 4GB RAM/ 32GB eMMC",
+    "ESP32 board equipped with Ethernet and MicroSD card slot",
+    "ESP32 Wi-Fi & Bluetooth SoC | Espressif Systems",
+    "ESP32-POE - Open Source Hardware Board",
+    "ESP32-S3-BOX-3 Espressif Systems AIoT",
+    "ESP8266 Bed Occupancy Project",
+    "ESPHome Starter Kit",
+    "Ethernet Adapter for Chromecast with Google TV",
+    "eufy Security Indoor Cam 2K Pan & Tilt",
+    "Fractal Design",
+    "Generlink Transfer Switch",
+    "GL-AR750S - The SLATE Our favorite travel router",
+    "H4 Mini-ITX Kit",
+    "H4 Mini-ITX Kit – ODROID",
+    "HeaterMeter, the open-source barbecue controller - Raspberry Pi",
+    "Home Assistant Blue!",
+    "Home Assistant Connect ZBT-1",
+    "Home Assistant Connect ZBT-2",
+    "Home Assistant Connect ZWA-2",
+    "Home Assistant Green - Seeed Studio",
+    "Home Assistant SkyConnect",
+    "Home Assistant Voice",
+    "Home Assistant Voice Preview Edition - Home Assistant",
+    "Home Assistant Yellow",
+    "iodé",
+    "Kobol - Helios64 Open Source NAS",
+    "Mecha Comet - Modular Linux Handheld Computer powered by Open-Source Software",
+    "NanoPi - a single board computer computer company based out of GuangDong, China. Mainly shipping with Samsung, Allwinner, and RockChip SoCs",
+    "NodeMCU-32S Development Board Details, Pinout, Specs",
+    "Odroid - a series of single-board computers and tablet computers created by Hardkernel, located in South Korea. Mainly using Amlogic SoCs",
+    "Odroid GO - Retro gaming based on the ESP32 microcontroller",
+    "ODROID H4 Mini-ITX Kit",
+    "ODROID H4 PLUS",
+    "ODROID-GO Super",
+    "ODROID-GO Super Dim Gray",
+    "ODROID-H3 / H3+ — ameriDroid",
+    "ODROID-H3 Case Type 2 – ODROID",
+    "ODROID-H3 Case Type 3 – ODROID",
+    "ODROID-H3+",
+    "ODROID-H3+ – ODROID",
+    "ODROID-H4 PLUS",
+    "ODROID-H4 – ODROID",
+    "ODROID-H4+ – ODROID",
+    "Orange Pi - an open source single board computer, based on Raspberry Pi but generally lower in price and manufactured by Shenzhen Xunlong Software. Mainly using Allwinner based SoCs",
+    "Orange Pi Zero",
+    "Pepwave MAX Transit DUO “PrimeCare Edition” Dual Modem LTE-A",
+    "Pi-DAC+ I2S audiophile sound card for Raspberry Pi",
+    "PinePhone “BraveHeart” Limited Edition Linux SmartPhone for early adopters",
+    "Pioneer FreedomBox Home Server Kit",
+    "PLF10 Smart Plug – Kaufman Home Automation",
+    "Pockethernet",
+    "Poynting 7-in-1 4xLTE, 2xWIFI & 1xGPS Roof Antenna",
+    "Pre-show: PSATA HATs support up to four drives on Raspberry Pi 4 or Rock Pi 4",
+    "Privacy friendly ESP32 smart doorbell with Home Assistant local integration",
+    "QUAD SATA KIT for Raspberry PI",
+    "Raspberry Pi - Single-board computers developed in the United Kingdom by the Raspberry Pi Foundation. Mainly using Broadcom SoCs",
+    "Raspberry Pi 4 Desktop Kit",
+    "Raspberry Pi 4 on sale now from $35",
+    "Raspberry Pi 4 Rev 1.2 Fixes USB-C Power Issues, Improves SD Card Resilience",
+    "Raspberry Pi Keyboard and Mouse",
+    "Raspberry Pi NAS SATA Adapter Stackable X828 2.5",
+    "Raspberry Pi Power Monitor",
+    "Raspberry Pi Power Monitor Flyer",
+    "Reolink Video Doorbell PoE",
+    "Shelly 2.5",
+    "Shelly 2.5 - Shelly Cloud",
+    "Shelly Flood",
+    "Shelly Leak Sensor",
+    "Shelly Plus H&T",
+    "Shelly Plus H&T - Shelly Cloud",
+    "Shelly Plus Plug US",
+    "Shelly Smoke",
+    "Smart Thermostats & Smart Home Devices | ecobee",
+    "SmartThings water leak sensor — Aeotec Zigbee sensor",
+    "SONOFF CC2531 USB Zigbee Dongle",
+    "SONOFF SV",
+    "SONOFF Zigbee 3.0 USB Dongle Plus",
+    "Spud Router",
+    "Steam Controller",
+    "The LUP Odroid H3+ Chassis",
+    "The Mooltipass Hardware Authenticator",
+    "ThinkBox V2 - A Custom 4-Bay SATA/SAS HDD NAS for Your Lenovo M720Q",
+    "TubesZB – TubesZB Coordinators and Router",
+    "Ubiquiti WiFi",
+    "Unleash Your Creativity with ESP32-S3-BOX-3",
+    "wESP32 — Wired ESP32 with PoE",
+    "Wi-Fi smart thermostat | ecobee",
+    "WLED High Power Addressable LED Strip Controller",
+    "Wyze Cam | 1080p HD Smart Home Camera With Free AWS Cloud",
+    "Wyze Doorbell",
+    "Wyze Doorbell Camera",
+    "Xiaomi Mijia BLE Temperature and Humidity Sensor - Home Assistant",
+    "YARH.IO MKI: Raspberry Pi 3B+ Hackable Linux Handheld",
+    "Zooz ZEN05 Outdoor Smart Plug – ZOOZ"
+  ]
 }

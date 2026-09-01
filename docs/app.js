@@ -106,7 +106,7 @@
       return a.t.name.localeCompare(b.t.name);
     });
 
-    return scored.map(function (x) { return x.t; });
+    return scored;
   }
 
   function renderMentionList(mentions) {
@@ -131,15 +131,22 @@
   // as separate flat rows — that's the whole fix for e.g. a "nextcloud"
   // search surfacing a dozen near-duplicate rows. A member searched on its
   // own (its parent doesn't match) still shows normally at the top level.
-  function groupFamilies(list) {
+  // Only nests when the parent itself is a real name match (score >= 60),
+  // not merely an incidental description mention — otherwise a query that
+  // directly names a child (e.g. "hacs") could bury it a click deeper under
+  // a parent that only turned up because its blurb happens to mention it.
+  var NAME_MATCH_SCORE = 60;
+
+  function groupFamilies(scoredList) {
     var presentParents = {};
-    list.forEach(function (t) {
-      if (t.family && t.isFamilyParent) presentParents[t.family] = t;
+    scoredList.forEach(function (x) {
+      if (x.t.family && x.t.isFamilyParent && x.s >= NAME_MATCH_SCORE) presentParents[x.t.family] = x.t;
     });
 
     var topLevel = [];
     var childrenOf = {};
-    list.forEach(function (t) {
+    scoredList.forEach(function (x) {
+      var t = x.t;
       if (t.family && !t.isFamilyParent && presentParents[t.family]) {
         (childrenOf[t.family] = childrenOf[t.family] || []).push(t);
       } else {

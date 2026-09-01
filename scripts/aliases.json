@@ -1,0 +1,114 @@
+{
+  "_comment": "Manual curation for tool 'families' where the raw show-notes extraction produced many near-duplicate/noise entries for what's really one product (blog posts, GitHub issues, NixOS-deployment writeups, docker-compose examples, etc all mentioning the same core tool). Two mechanisms: 'merge' folds a noisy name variant into a canonical entry (its episode mentions are absorbed, it stops existing as its own row). 'families' groups genuinely distinct sub-products/apps under a shared parent for display (each keeps its own entry, but the site nests them under the parent instead of showing them as flat top-level rows when both match a search). 'overrides' forces clean name/url/description/category on a canonical entry instead of the usual best-of-the-raw-variants heuristic. Add more families here as other duplicated products are found - this file is the whole mechanism, no code changes needed to extend it.",
+
+  "merge": {
+    "nextcloud": "nextcloud",
+    "a fireside chat with nextcloud founder frank karlitschek - nextcloud": "nextcloud",
+    "celebrating 2 years nextcloud": "nextcloud",
+    "ai in nextcloud: what, why and how - nextcloud": "nextcloud",
+    "develop for nextcloud": "nextcloud",
+    "implementing s3 compatible primary storage for nextcloud": "nextcloud",
+    "using the occ command": "nextcloud",
+    "nixtcloud: self-hosted cloud in one command": "nextcloud",
+    "news - apps - app store - nextcloud": "nextcloud",
+    "nextcloud news": "nextcloud",
+    "configuring federation sharing — nextcloud": "nextcloud",
+    "help a newbie to make a choice - 🚧 installation - nextcloud community": "nextcloud",
+    "install nextcloud for linux using the snap store": "nextcloud",
+    "updating to 3.2.0 fails on sqlite installations · nextcloud": "nextcloud",
+    "remove not supported column comments for sqlite - nextcloud": "nextcloud",
+    "converting nextcloud database typw": "nextcloud",
+    "linuxserver.io nextcloud docker image": "nextcloud",
+    "nextcloud docker-compose examples": "nextcloud",
+    "reinernippes/nextcloud: ansible playbook to install nextcloud, php, nginx or apache, mariadb or postgres, redis-server, onlyoffice or collabora office": "nextcloud",
+    "nextcloud/ansible-collection-nextcloud-admin: the ansible galaxy for your nextcloud administrative needs.": "nextcloud",
+    "nextcloud + davx5": "nextcloud",
+    "csrf check failed · issue #768 · nextcloud/ios": "nextcloud",
+    "nextcloud 14 now available": "nextcloud",
+    "new in nextcloud 20": "nextcloud",
+    "nextcloud hub 9": "nextcloud",
+    "nextcloud - online collaboration platform": "nextcloud",
+    "nextcloud - official docker image": "nextcloud",
+    "nextcloud/docker: ⛴ docker image of nextcloud": "nextcloud",
+    "nextcloud keep or sweep": "nextcloud",
+    "nextcloud workflow scripts": "nextcloud",
+    "nextcloud file-drop": "nextcloud",
+    "nextcloud module-services-nextcloud": "nextcloud",
+    "nextcloud server releases": "nextcloud",
+    "nextcloud registration plugin": "nextcloud",
+    "nextcloud two-factor authentication": "nextcloud",
+    "nextcloud phone sync": "nextcloud",
+    "eric's nextcloud on nixos": "nextcloud",
+    "nextcloud nixos module": "nextcloud",
+    "nextcloud nixos setup overview": "nextcloud",
+    "nextcloud apps packaged in nixos": "nextcloud",
+    "the holy grail nextcloud setup made easy by nixos": "nextcloud",
+    "the holy grail nextcloud setup made easy by nixos · carlos vaz": "nextcloud",
+    "soltros' nextcloud-on-nixos": "nextcloud",
+    "nix nextcloud": "nextcloud",
+    "nixos nextcloud module docs": "nextcloud",
+    "nixos nextcloud service source": "nextcloud",
+    "nextcloud.nix at main · jupiterbroadcasting/nixconfigs": "nextcloud",
+    "lup's nextcloud.nix": "nextcloud",
+    "nixpkgs/nixos/modules/services/web-apps/nextcloud.nix at master · nixos/nixpkgs": "nextcloud",
+    "nixtcloud: nextcloud with nixos in the backend and p2p connectivity enabled": "nextcloud",
+    "lup’s nextcloud.nix": "nextcloud",
+    "soltros’ nextcloud-on-nixos": "nextcloud",
+
+    "nextcloud aio": "nextcloud-aio",
+    "nextcloud all-in-one": "nextcloud-aio",
+
+    "notes for nextcloud": "nextcloud notes",
+    "nextcloud cookbook on ios": "nextcloud cookbook",
+    "nextcloud/cookbook": "nextcloud cookbook",
+    "tasks - nextcloud apps": "nextcloud tasks",
+    "phonetrack - nextcloud apps": "nextcloud phonetrack",
+    "gpxpod - nextcloud": "nextcloud gpxpod",
+    "gpxedit - nextcloud": "nextcloud gpxedit",
+    "gpodder sync in the nextcloud app store": "nextcloud gpoddersync"
+  },
+
+  "overrides": {
+    "nextcloud": {
+      "name": "Nextcloud",
+      "url": "https://nextcloud.com",
+      "description": "Self-hosted file sync, calendar, contacts, and office/collaboration suite. Runs bare (NixOS module, Docker, or from source) for just the core server, or via Nextcloud AIO for a batteries-included bundle with more apps and stronger defaults out of the box.",
+      "category": "storage"
+    },
+    "nextcloud-aio": {
+      "name": "Nextcloud AIO",
+      "url": "https://github.com/nextcloud/all-in-one",
+      "description": "Nextcloud's official All-in-One Docker deployment — bundles the core server with commonly-used apps (Office, Talk, backups) and hardened defaults, versus configuring each piece yourself on a bare install.",
+      "category": "storage"
+    },
+    "nextcloud notes": {
+      "name": "Nextcloud Notes",
+      "description": "Nextcloud's official Notes app — plain-text/Markdown notes stored in your Nextcloud files and synced across devices.",
+      "category": "storage"
+    },
+    "nextcloud cookbook": { "name": "Nextcloud Cookbook" },
+    "nextcloud tasks": { "name": "Nextcloud Tasks" },
+    "nextcloud phonetrack": { "name": "Nextcloud PhoneTrack" },
+    "nextcloud gpxpod": { "name": "Nextcloud GpxPod" },
+    "nextcloud gpxedit": { "name": "Nextcloud GpxEdit" },
+    "nextcloud gpoddersync": { "name": "Nextcloud GPodder Sync" }
+  },
+
+  "families": {
+    "nextcloud": {
+      "parent": "nextcloud",
+      "label": "Nextcloud",
+      "members": [
+        "nextcloud-aio",
+        "nextcloud notes",
+        "nextcloud cookbook",
+        "nextcloud tasks",
+        "nextcloud phonetrack",
+        "nextcloudpi",
+        "nextcloud gpxpod",
+        "nextcloud gpxedit",
+        "nextcloud gpoddersync"
+      ]
+    }
+  }
+}

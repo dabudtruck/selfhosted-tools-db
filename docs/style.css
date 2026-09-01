@@ -315,6 +315,46 @@ img { max-width: 100%; }
 .mention-list a:hover { color: var(--signal); }
 .mention-list .show-tag { color: var(--freq); }
 
+.family-toggle {
+  grid-column: 1 / -1;
+  margin-top: 10px;
+  padding: 6px 0;
+  border: none;
+  border-top: 1px dashed var(--line);
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  color: var(--freq);
+}
+.family-toggle:hover { color: var(--signal); }
+
+.family-list {
+  grid-column: 1 / -1;
+  display: none;
+  margin-top: 4px;
+}
+.family-list.open { display: block; }
+
+.family-item {
+  padding: 10px 0 10px 16px;
+  border-left: 2px solid var(--freq-fill);
+}
+.family-item:not(:last-child) { border-bottom: 1px dashed var(--line); }
+
+.family-item .name {
+  font-family: 'Archivo', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-decoration: none;
+  color: var(--ink);
+  margin-right: 8px;
+}
+.family-item .name:hover { color: var(--signal); }
+.family-item .row-desc { margin-top: 4px; font-size: 0.88rem; }
+
 .empty {
   padding: 60px 0;
   text-align: center;

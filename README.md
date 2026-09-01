@@ -21,6 +21,18 @@ tool into one entry (aggregating every episode it came up in) and exports
 new episodes, then `dedupe_and_export.py` to refresh the site's data; see
 `PROGRESS.md` for details.
 
+Exact-name dedup only catches literal repeats. Some products (Nextcloud
+being the worst offender — dozens of show-notes entries that were really
+blog posts, GitHub issues, and NixOS-deployment writeups all about the one
+tool) needed manual curation on top of that. `scripts/aliases.json` holds
+it: a `merge` map folds noisy name variants into one canonical entry, an
+`overrides` map forces a clean name/description on that entry instead of
+picking one of the raw variants, and a `families` map groups genuinely
+distinct sub-apps (Nextcloud Notes, Nextcloud AIO, etc.) under a shared
+parent so the site nests them instead of showing each as its own row. Add
+more entries there to curate other duplicated tools — no code changes
+needed, `dedupe_and_export.py` reads it automatically.
+
 ## Community corrections & additions
 
 Every tool row on the live site has a "Suggest a fix" link, and the header

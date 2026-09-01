@@ -126,12 +126,55 @@
       .join("");
   }
 
+  // When both a family's parent and one or more of its members match the
+  // same search, nest the members under the parent instead of showing them
+  // as separate flat rows — that's the whole fix for e.g. a "nextcloud"
+  // search surfacing a dozen near-duplicate rows. A member searched on its
+  // own (its parent doesn't match) still shows normally at the top level.
+  function groupFamilies(list) {
+    var presentParents = {};
+    list.forEach(function (t) {
+      if (t.family && t.isFamilyParent) presentParents[t.family] = t;
+    });
+
+    var topLevel = [];
+    var childrenOf = {};
+    list.forEach(function (t) {
+      if (t.family && !t.isFamilyParent && presentParents[t.family]) {
+        (childrenOf[t.family] = childrenOf[t.family] || []).push(t);
+      } else {
+        topLevel.push(t);
+      }
+    });
+
+    return { topLevel: topLevel, childrenOf: childrenOf };
+  }
+
+  function renderFamilyList(children) {
+    return children
+      .slice()
+      .sort(function (a, b) { return b.mentionCount - a.mentionCount || a.name.localeCompare(b.name); })
+      .map(function (c) {
+        var url = c.url ? escapeHtml(c.url) : "#";
+        return (
+          '<div class="family-item">' +
+            '<a class="name" href="' + url + '" target="_blank" rel="noopener">' + escapeHtml(c.name) + "</a>" +
+            '<span class="cat-tag">' + escapeHtml(categoryLabel(c.category)) + "</span>" +
+            '<a class="fix-link" href="' + correctionUrl(c) + '" target="_blank" rel="noopener">Suggest a fix ↗</a>' +
+            '<p class="row-desc">' + escapeHtml(c.description) + "</p>" +
+          "</div>"
+        );
+      })
+      .join("");
+  }
+
   function renderResults() {
     var matches = search();
-    var shown = matches.slice(0, RESULT_CAP);
+    var grouped = groupFamilies(matches);
+    var shown = grouped.topLevel.slice(0, RESULT_CAP);
 
     el.meta.innerHTML =
-      "<strong>" + matches.length + "</strong> tool" + (matches.length === 1 ? "" : "s") +
+      "<strong>" + grouped.topLevel.length + "</strong> tool" + (grouped.topLevel.length === 1 ? "" : "s") +
       (state.query.trim() ? ' matching "' + escapeHtml(state.query.trim()) + '"' : "") +
       (state.category !== "all" ? " in " + escapeHtml(categoryLabel(state.category)) : "") +
       (state.query.trim() === "" ? " · sorted by most-discussed" : "");
@@ -144,6 +187,7 @@
     var html = shown
       .map(function (t) {
         var url = t.url ? escapeHtml(t.url) : "#";
+        var children = t.family && t.isFamilyParent ? grouped.childrenOf[t.family] : null;
         return (
           '<div class="row">' +
             '<div class="row-main">' +
@@ -158,6 +202,12 @@
               '<span class="big">' + t.mentionCount + "×</span>mentioned" +
             "</button>" +
             '<div class="mention-list">' + renderMentionList(t.mentions) + "</div>" +
+            (children && children.length
+              ? '<button class="family-toggle" type="button" aria-expanded="false">' +
+                  "+ " + children.length + " related " + escapeHtml(t.familyLabel) + " app" + (children.length === 1 ? "" : "s") + " ↓" +
+                "</button>" +
+                '<div class="family-list">' + renderFamilyList(children) + "</div>"
+              : "") +
           "</div>"
         );
       })
@@ -165,21 +215,29 @@
 
     el.results.innerHTML = html;
 
-    if (matches.length > RESULT_CAP) {
+    if (grouped.topLevel.length > RESULT_CAP) {
       el.results.insertAdjacentHTML(
         "beforeend",
-        '<div class="more-note">' + (matches.length - RESULT_CAP) + " more match" +
-          (matches.length - RESULT_CAP === 1 ? "" : "es") + " not shown — narrow your search or pick a category to see them.</div>"
+        '<div class="more-note">' + (grouped.topLevel.length - RESULT_CAP) + " more match" +
+          (grouped.topLevel.length - RESULT_CAP === 1 ? "" : "es") + " not shown — narrow your search or pick a category to see them.</div>"
       );
     }
   }
 
   el.results.addEventListener("click", function (e) {
-    var btn = e.target.closest(".mentions");
-    if (!btn) return;
-    var row = btn.closest(".row");
-    row.classList.toggle("open");
-    btn.setAttribute("aria-expanded", row.classList.contains("open") ? "true" : "false");
+    var mentionsBtn = e.target.closest(".mentions");
+    if (mentionsBtn) {
+      var row = mentionsBtn.closest(".row");
+      row.classList.toggle("open");
+      mentionsBtn.setAttribute("aria-expanded", row.classList.contains("open") ? "true" : "false");
+      return;
+    }
+    var famBtn = e.target.closest(".family-toggle");
+    if (famBtn) {
+      famBtn.classList.toggle("open");
+      famBtn.setAttribute("aria-expanded", famBtn.classList.contains("open") ? "true" : "false");
+      famBtn.nextElementSibling.classList.toggle("open");
+    }
   });
 
   el.chips.addEventListener("click", function (e) {

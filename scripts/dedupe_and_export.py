@@ -3,14 +3,36 @@
 
 One entry per tool (case-insensitive name match), with an aggregated
 mentions[] list of every episode it came up in.
+
+Also applies scripts/aliases.json, which handles two things exact-name
+dedup can't: folding many noisy show-notes name variants of one product
+into a single canonical entry ("merge"), and grouping genuinely distinct
+sub-products under a shared parent for display ("families") instead of
+each cluttering the flat search results. See that file for details.
 """
 import sqlite3
 import json
+import os
 import sys
 from collections import defaultdict
 
 DB_PATH = sys.argv[1] if len(sys.argv) > 1 else "tools.db"
 OUT_PATH = sys.argv[2] if len(sys.argv) > 2 else "tools.json"
+ALIASES_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "aliases.json")
+
+with open(ALIASES_PATH) as f:
+    aliases = json.load(f)
+merge_map = {k.lower(): v.lower() for k, v in aliases.get("merge", {}).items()}
+overrides = {k.lower(): v for k, v in aliases.get("overrides", {}).items()}
+
+# key (lowercase canonical name) -> family id, for both parents and members
+family_of = {}
+family_label = {}
+for fam_id, fam in aliases.get("families", {}).items():
+    family_label[fam_id] = fam["label"]
+    family_of[fam["parent"].lower()] = fam_id
+    for member in fam["members"]:
+        family_of[member.lower()] = fam_id
 
 conn = sqlite3.connect(DB_PATH)
 conn.row_factory = sqlite3.Row
@@ -26,6 +48,7 @@ rows = conn.execute("""
 by_key = defaultdict(list)
 for r in rows:
     key = r["name"].strip().lower()
+    key = merge_map.get(key, key)
     by_key[key].append(r)
 
 tools = []
@@ -63,14 +86,28 @@ for key, group in by_key.items():
         key=lambda m: m["date"] or "",
     )
 
-    tools.append({
+    ov = overrides.get(key, {})
+    name = ov.get("name", name)
+    url = ov.get("url", url)
+    description = ov.get("description", description)
+    category = ov.get("category", category)
+
+    tool = {
         "name": name,
         "url": url,
         "description": description,
         "category": category,
         "mentions": mentions,
         "mentionCount": len(mentions),
-    })
+    }
+
+    fam_id = family_of.get(key)
+    if fam_id:
+        tool["family"] = fam_id
+        tool["familyLabel"] = family_label[fam_id]
+        tool["isFamilyParent"] = (key == aliases["families"][fam_id]["parent"].lower())
+
+    tools.append(tool)
 
 tools.sort(key=lambda t: t["name"].lower())
 

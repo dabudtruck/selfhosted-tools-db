@@ -21,6 +21,16 @@ tool into one entry (aggregating every episode it came up in) and exports
 new episodes, then `dedupe_and_export.py` to refresh the site's data; see
 `PROGRESS.md` for details.
 
+## Community corrections & additions
+
+Every tool row on the live site has a "Suggest a fix" link, and the header
+has a "missing a tool? suggest it" link — both just open a pre-filled
+GitHub issue (labeled `correction` or `addition`), no account/backend of
+mine involved beyond GitHub's own. No live ratings or comments by design —
+this stays a static, no-backend site; corrections get triaged and merged
+into `tools.db` by hand (or via a future script keyed on issue label),
+then re-exported with `dedupe_and_export.py`.
+
 ## Live site (`docs/`)
 
 Static search page, no backend — `docs/index.html` + `docs/app.js` fetch

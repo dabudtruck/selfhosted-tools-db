@@ -24,6 +24,27 @@
     });
   }
 
+  var REPO = "dabudtruck/selfhosted-tools-db";
+
+  function correctionUrl(tool) {
+    var title = "Correction: " + tool.name;
+    var body = [
+      "**Tool:** " + tool.name,
+      "**Current category:** " + tool.category,
+      "**Current description:** " + (tool.description || "(none on record)"),
+      "**Current URL:** " + (tool.url || "(none on record)"),
+      "",
+      "**What's wrong, or what should change:**",
+      "",
+      "",
+      "_Opened from the Homelab Tools site._",
+    ].join("\n");
+    return (
+      "https://github.com/" + REPO + "/issues/new?labels=correction&title=" +
+      encodeURIComponent(title) + "&body=" + encodeURIComponent(body)
+    );
+  }
+
   function categoryLabel(cat) {
     if (cat === "other") return "Uncategorized";
     if (cat === "ai") return "AI";
@@ -129,6 +150,7 @@
               '<div class="row-title">' +
                 '<a class="name" href="' + url + '" target="_blank" rel="noopener">' + escapeHtml(t.name) + "</a>" +
                 '<span class="cat-tag">' + escapeHtml(categoryLabel(t.category)) + "</span>" +
+                '<a class="fix-link" href="' + correctionUrl(t) + '" target="_blank" rel="noopener">Suggest a fix ↗</a>' +
               "</div>" +
               '<p class="row-desc">' + escapeHtml(t.description) + "</p>" +
             "</div>" +

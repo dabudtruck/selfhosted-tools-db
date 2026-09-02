@@ -8,6 +8,7 @@
     query: "",
     category: "all",
     catCounts: {},
+    fullOnly: false,
   };
 
   var el = {
@@ -16,6 +17,7 @@
     countDial: document.getElementById("count-dial"),
     results: document.getElementById("results"),
     meta: document.getElementById("result-meta"),
+    sizeToggle: document.getElementById("size-toggle"),
   };
 
   function escapeHtml(s) {
@@ -94,6 +96,9 @@
 
     if (state.category !== "all") {
       pool = pool.filter(function (t) { return t.category === state.category; });
+    }
+    if (state.fullOnly) {
+      pool = pool.filter(function (t) { return t.size === "FULL"; });
     }
 
     var scored = pool
@@ -251,6 +256,15 @@
     var chip = e.target.closest(".chip");
     if (!chip) return;
     state.category = chip.getAttribute("data-cat");
+    renderChips();
+    renderResults();
+  });
+
+  el.sizeToggle.addEventListener("click", function () {
+    state.fullOnly = !state.fullOnly;
+    el.sizeToggle.classList.toggle("on", state.fullOnly);
+    el.sizeToggle.setAttribute("aria-pressed", state.fullOnly ? "true" : "false");
+    state.catCounts = computeCatCounts(state.fullOnly ? state.all.filter(function (t) { return t.size === "FULL"; }) : state.all);
     renderChips();
     renderResults();
   });

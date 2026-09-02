@@ -21,7 +21,9 @@ from collections import defaultdict
 DB_PATH = sys.argv[1] if len(sys.argv) > 1 else "tools.db"
 OUT_PATH = sys.argv[2] if len(sys.argv) > 2 else "tools.json"
 HARDWARE_OUT_PATH = sys.argv[3] if len(sys.argv) > 3 else os.path.join(os.path.dirname(OUT_PATH), "hardware.json")
+OTHER_OUT_PATH = sys.argv[4] if len(sys.argv) > 4 else os.path.join(os.path.dirname(OUT_PATH), "other.json")
 ALIASES_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "aliases.json")
+CLASSIFICATION_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "software_classification.json")
 
 with open(ALIASES_PATH) as f:
     aliases = json.load(f)
@@ -33,6 +35,30 @@ overrides = {k.lower(): v for k, v in aliases.get("overrides", {}).items()}
 # main list. Matched against the raw show-notes name, same as merge/family
 # keys above.
 hardware_exclude = {n.strip().lower() for n in aliases.get("hardware_exclude", [])}
+
+# APP vs JUNK (article/news/tutorial/GitHub issue/forum thread/etc - not
+# itself a piece of software) classification, keyed by the *canonical*
+# tool name (after merge/family/override, not the raw show-notes name).
+# One-time bulk pass via a local LLM (see helpfiles), reviewed by hand;
+# not meant to be hand-edited like aliases.json - re-run the classifier
+# to refresh it. Missing key defaults to APP/FULL so a name this file
+# hasn't seen yet (a new episode, a new alias override) never silently
+# vanishes.
+try:
+    with open(CLASSIFICATION_PATH) as f:
+        classification = json.load(f)
+except FileNotFoundError:
+    classification = {}
+
+# Hand-curated names (an override's display name, or a family parent) are
+# never auto-excluded, no matter what the classifier said - these are
+# already manually verified real software. Caught a real bug this way:
+# the classifier had marked "Home Assistant" and "Nextcloud Cookbook"
+# themselves as JUNK.
+never_exclude = {ov["name"] for ov in overrides.values() if "name" in ov}
+# family membership itself gets resolved onto `never_exclude` below, once
+# all_tools exists and each tool's actual (correctly-cased) name is known -
+# see the "in never_exclude" loop.
 
 # key (lowercase canonical name) -> family id, for both parents and members
 family_of = {}
@@ -128,15 +154,32 @@ def build_tools(by_key):
     return tools
 
 
-tools = build_tools(by_key)
+all_tools = build_tools(by_key)
 hardware = build_tools(by_key_hardware)
+
+never_exclude |= {t["name"] for t in all_tools if "family" in t}
+
+tools = []
+other = []
+for t in all_tools:
+    cls, size = classification.get(t["name"], ["APP", "FULL"])
+    if t["name"] in never_exclude:
+        cls, size = "APP", size if size != "-" else "FULL"
+    if cls == "JUNK":
+        other.append(t)
+    else:
+        t["size"] = size
+        tools.append(t)
 
 with open(OUT_PATH, "w") as f:
     json.dump(tools, f, separators=(",", ":"))
 with open(HARDWARE_OUT_PATH, "w") as f:
     json.dump(hardware, f, separators=(",", ":"))
+with open(OTHER_OUT_PATH, "w") as f:
+    json.dump(other, f, separators=(",", ":"))
 
-print(f"{len(rows)} raw mentions -> {len(tools)} distinct tools ({len(hardware)} hardware set aside)", file=sys.stderr)
+print(f"{len(rows)} raw mentions -> {len(tools)} apps "
+      f"({len(hardware)} hardware, {len(other)} non-software set aside)", file=sys.stderr)
 cats = defaultdict(int)
 for t in tools:
     cats[t["category"]] += 1

@@ -164,6 +164,53 @@ img { max-width: 100%; }
 #q:focus { outline: none; }
 #q::placeholder { color: var(--ink-dim); }
 
+.size-toggle {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 16px;
+  border: 1px solid var(--line);
+  background: var(--paper-raised);
+  color: var(--ink-dim);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.size-toggle:hover { color: var(--ink); border-color: var(--ink-dim); }
+
+.size-toggle .box {
+  width: 13px;
+  height: 13px;
+  border: 1px solid var(--ink-dim);
+  flex: none;
+  position: relative;
+}
+.size-toggle:hover .box { border-color: var(--ink); }
+
+.size-toggle.on {
+  color: var(--freq);
+  border-color: var(--freq);
+  background: var(--freq-fill);
+}
+.size-toggle.on .box {
+  border-color: var(--freq);
+  background: var(--freq);
+}
+.size-toggle.on .box::after {
+  content: '';
+  position: absolute;
+  left: 3px;
+  top: 0px;
+  width: 4px;
+  height: 8px;
+  border: solid var(--paper-raised);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
 .chips {
   display: flex;
   gap: 7px;
@@ -403,4 +450,5 @@ a:focus-visible, button:focus-visible, input:focus-visible {
   .masthead .source { text-align: left; }
   .row { grid-template-columns: 1fr; }
   .mentions { text-align: left; padding-left: 0; }
+  .size-toggle { width: 100%; justify-content: flex-start; padding: 10px 16px; }
 }

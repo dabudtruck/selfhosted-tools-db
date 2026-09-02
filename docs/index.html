@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Homelab Tools</title>
-<meta name="description" content="Search every self-hosted tool mentioned across 825 episodes of the Self-Hosted and Linux Unplugged podcasts — 4,900+ tools, cited back to the episode.">
+<meta name="description" content="Search every self-hosted app mentioned across 825 episodes of the Self-Hosted and Linux Unplugged podcasts — 2,500+ apps, cited back to the episode.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📻</text></svg>">
 <link rel="stylesheet" href="style.css">
 </head>
@@ -29,6 +29,9 @@
       <div class="searchbox">
         <input id="q" type="text" placeholder="Search by name or what it does — “backup”, “media server”, “vpn”…" autocomplete="off" spellcheck="false">
       </div>
+      <button class="size-toggle" id="size-toggle" type="button" aria-pressed="false">
+        <span class="box"></span> Full apps only
+      </button>
     </div>
 
     <div class="chips" id="chips"></div>
@@ -40,7 +43,7 @@
   </main>
 
   <footer>
-    <span>Built from public RSS show-notes archives. ~68% of entries are uncategorized (“Uncategorized”) or missing a description — that’s the raw show-notes data, not curated after the fact. Physical hardware (SBCs, sensors, radios, NAS boxes, etc.) is deliberately left out — this list is software only.</span>
+    <span>Built from public RSS show-notes archives, then filtered to actual self-hosted apps — physical hardware and non-software mentions (news, reviews, tutorials, forum threads) were set aside algorithmically and reviewed by hand, so some misses are possible either direction; “Suggest a fix” on any row reports one. ~68% of remaining entries are uncategorized (“Uncategorized”) or missing a description — that’s the raw show-notes data, not curated after the fact.</span>
     <a href="https://github.com/dabudtruck/selfhosted-tools-db" target="_blank" rel="noopener">github.com/dabudtruck/selfhosted-tools-db</a>
   </footer>
 

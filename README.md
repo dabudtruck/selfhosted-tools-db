@@ -1,6 +1,6 @@
 # Self-Hosted Tools Reference Database
 
-**Live site: [dabudtruck.github.io/selfhosted-tools-db](https://dabudtruck.github.io/selfhosted-tools-db/)** — search all 4,888 tools in the browser, no setup required.
+**Live site: [dabudtruck.github.io/selfhosted-tools-db](https://dabudtruck.github.io/selfhosted-tools-db/)** — search 2,500+ apps in the browser, no setup required.
 
 A searchable catalog of every self-hosted software tool/app mentioned in the show notes of two Jupiter Broadcasting podcasts:
 
@@ -42,6 +42,37 @@ entirely; `dedupe_and_export.py` writes them to their own
 not linked from the site yet — a real hardware inventory page is future
 work, not built here). Add more names to `hardware_exclude` as new ones
 turn up; it matches on the raw show-notes name, same as `merge`/`families`.
+
+The scope is *self-hosted apps* specifically - not every software-adjacent
+mention in a general Linux talk show's notes qualifies (news articles,
+reviews, tutorials, forum threads, GitHub issues/PRs, papers, conference
+talks, podcast episode notes, and orgs/companies all showed up as "tools"
+in the raw extraction). `scripts/software_classification.json` holds a
+JUNK/APP verdict (plus FULL/SMALL for apps, so the live site can filter
+out small scripts/utilities) for every entry, keyed by its *canonical*
+name (after merge/family/override). It was built with a one-time bulk
+pass through tcloudserver's local Ollama (`granite3.1-dense:8b`, batches
+of 25, the tool's name/description/URL-domain as signal), reviewed by
+sampling for accuracy and refined once (adding the URL-domain hint, and a
+mechanical rescue rule for anything the model marked JUNK despite living
+at a real repo/package root - `github.com/owner/repo`, `flathub.org/apps/…`,
+etc, not an issues/PR/wiki sub-path). Hand-curated names from
+`aliases.json` (any `overrides` entry, any family member) are never
+auto-excluded regardless of what the classifier said - this caught the
+classifier wrongly flagging "Home Assistant" and "Nextcloud Cookbook"
+themselves as JUNK before launch. It's still an algorithmic pass at
+~90%+ but not 100% accuracy on messy show-notes text; JUNK entries aren't
+deleted, `dedupe_and_export.py` writes them to `docs/data/other.json`
+instead, so a miss is recoverable without re-running the whole classifier.
+`scripts/classify_apps.py` re-runs the model pass after a data refresh
+(resumable via a local checkpoint file, gitignored, since a full run
+takes over an hour on tcloudserver's CPU-only Ollama) - but it only gets
+you the checkpoint. Turning that into a refreshed
+`software_classification.json` still means: hand-resolving whatever it
+couldn't format cleanly after retries, applying the URL-rescue rule
+(anything marked JUNK that lives at a real `github.com/owner/repo`,
+`flathub.org/apps/…`, etc root gets flipped back to APP), and merging
+the two into the final file. None of that last mile is scripted yet.
 
 ## Community corrections & additions
 
